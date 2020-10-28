@@ -1,0 +1,12 @@
+{% extends "voca/base.html" %}
+
+{% block sidebar %}
+{# No section sidebar here #}
+{% endblock %}
+
+
+{% block section_content %}
+    {% if content_text %}
+        <h2>{{ content_text }}</h2>
+    {% endif %}
+{% endblock %}

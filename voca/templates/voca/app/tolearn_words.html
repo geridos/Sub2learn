@@ -1,0 +1,44 @@
+{% extends "voca/base.html" %}
+
+{% block sidebar %}
+        <div id="sidebar">
+
+        <nav class="w3-sidebar w3-bar-block w3-collapse w3-large w3-theme-l5 w3-animate-left" id="mySidebar">
+            <a href="javascript:void(0)" onclick="w3_close()" class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
+                <i class="fa fa-remove"></i>
+            </a>
+
+            <h4 class="w3-bar-item"><b>Menu</b></h4>
+            {% for link, text in sidebar.items %}
+            <a class="w3-bar-item w3-button w3-hover-black" href="{{ link }}">{{ text }}</a>
+            {% endfor %}
+        </nav>
+
+{% endblock %}
+
+{% block section_content %}
+
+
+Hello {{ profile.name }} this are the {{ mode }}
+{% if selected_words %}
+    {% for w in selected_words %}
+    <li> {{ w }}</li>
+    {%endfor%}
+{% endif %}
+{% if list_words %}
+This are the list of words you been through
+<form action="" method="post">
+{% csrf_token %}
+<ul>
+    {% for w in list_words %}
+    <input type="checkbox" name="{{ w }}" id="word{{ forloop.counter }}" value="{{ w.id  }}">
+    <a href=https://dictionnaire.reverso.net/anglais-francais/{{ w }} target="_blank">{{ w }} </a>
+    <br>
+    {% endfor %}
+</ul>
+<input type="submit" value="Burn">
+</form>
+{% else %}
+<p>No words are available.</p>
+{% endif %}
+{% endblock %}
