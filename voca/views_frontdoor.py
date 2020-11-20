@@ -8,8 +8,15 @@ from django.urls import reverse
 
 from django.utils import timezone
 
+#content_text = """Une ferme et constante résolution d\'exécuter tout ce que la raison lui conseillera,
+#sans que ses passions ou ses appétits l'en détournent; et c'est la fermeté de cette résolution
+#que je crois devoir être prise pour la vertue
+#René Descartes"""
+
 def index(request):
-    content_text = 'bla this is the web site of Bertrand'
+    content_text = """\"Une ferme et constante résolution d\'exécuter tout ce que la raison lui conseillera,
+    et c'est la fermeté de cette résolution que je crois devoir être prise pour la vertue.\"
+    René Descartes"""
     #pictures = []
     #time =
     #number of visitors

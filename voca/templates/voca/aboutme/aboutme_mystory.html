@@ -2,5 +2,29 @@
 
 
 {% block section_content %}
-{{ content }}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'voca/common.css' %}">
+<div class="content_aboutme">
+<div class="content_image">
+<img src="{% static 'voca/images/bertrand.jpg' %}" alt="Bertrand de Montety profile"/>
+</div>
+<div class="content_text">
+<p>
+My name is Bertrand de Montety,
+I’m a french engineer graduated with a master degree in computer science with 4 years of experience in 3 countries.
+I’ve been living in London for around 2 years by now.
+</p>
+<p>
+I like challenging myself by leaving my comfort zone and taking risks. I think the best way to do that is to always consider opportunities, meeting people and seeing the world.
+</p>
+<p>
+I also like learning new technologies and developing my project ideas. That's why creating this website myself is just a funny and easy way to improve my skills in something  I’ve never done before.
+</p>
+<p>
+I’m a C and C++ developer on embedded systems with a good knowledge using Linux.
+If you want to know more about me, please check my Resume here or just give me a call.
+</p>
+</div>
+</div>
+
 {% endblock %}

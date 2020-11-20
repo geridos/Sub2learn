@@ -1,0 +1,35 @@
+body {
+        background: white url("images/Abu_Dhabi_LouvreV1.jpg") no-repeat;
+        background-size: cover, 100%;
+}
+
+.supertext {
+    font: italic small-caps bold 100px/100px Georgia, serif;
+    margin:auto;
+}
+
+.minitext {
+    font: italic small-caps bold 30px/20px Georgia, serif;
+    margin:auto;
+}
+
+P.container {
+    height: 100px;
+    position: relative;
+}
+
+P.center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+
+}
+
+#imageBertrand {
+    height:20%;
+    border:1px solid black;
+    margin:5px;
+}

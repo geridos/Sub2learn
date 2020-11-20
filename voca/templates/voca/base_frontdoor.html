@@ -1,12 +1,26 @@
 {% extends "voca/base.html" %}
 
+{% block background %}
+
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'voca/home.css' %}">
+<div id="background"/>
+{% endblock %}
+
+
 {% block sidebar %}
 {# No section sidebar here #}
 {% endblock %}
 
+{% block full_page %}
 
-{% block section_content %}
-    {% if content_text %}
-        <h2>{{ content_text }}</h2>
-    {% endif %}
+
+<div class="w3-container">
+    <P class="container">
+    <P class="center">
+    <p class="minitext"><br/><br/> Welcome to ...</p>
+    <p class="supertext"> Bertrand's blog </p>
+    </P>
+    </P>
+</div>
 {% endblock %}

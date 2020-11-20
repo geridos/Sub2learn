@@ -1,0 +1,44 @@
+.supertext {
+    font: italic small-caps bold 100px/100px Georgia, serif;
+    margin:auto;
+}
+
+.minitext {
+    font: italic small-caps bold 30px/20px Georgia, serif;
+    margin:auto;
+}
+
+P.container {
+    height: 100px;
+    position: relative;
+}
+
+P.center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+
+}
+
+.content_aboutme {
+    display:flex;
+}
+
+img {
+    height:20em;
+    width:20em;
+    border:1px solid black;
+    margin:10px;
+}
+
+.content_image {
+}
+
+.content_text {
+    width:60%;
+    margin:2%;
+    text-align:justify;
+}
