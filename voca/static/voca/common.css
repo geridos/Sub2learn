@@ -27,18 +27,26 @@ P.center {
     display:flex;
 }
 
-img {
+.profile_pic {
     height:20em;
     width:20em;
     border:1px solid black;
     margin:10px;
 }
 
-.content_image {
-}
-
 .content_text {
     width:60%;
     margin:2%;
     text-align:justify;
+}
+
+.gallery {
+    display:flex;
+}
+
+.maxwidth
+{
+    max-width:99%;
+    max-height:99%;
+    margin:2px;
 }

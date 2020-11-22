@@ -21,7 +21,14 @@ def index(request, aboutme_page):
         'sidebar' : sidebar_context(),
         'content' : content,
     }
-    return render(request, 'voca/aboutme/aboutme_mystory.html', context)
+    if aboutme_page == "mystory":
+        return render(request, 'voca/aboutme/aboutme_mystory.html', context)
+    elif aboutme_page == "resume":
+        return render(request, 'voca/aboutme/aboutme_resume.html', context)
+    elif aboutme_page == "mypictures":
+        return render(request, 'voca/aboutme/aboutme_pictures.html', context)
+    else:
+        return render(request, 'voca/base_aboutme.html', context)
 
 def load_content_context(page_name):
         if page_name == 'mystory':

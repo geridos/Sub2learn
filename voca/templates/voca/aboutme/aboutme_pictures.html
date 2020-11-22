@@ -1,5 +1,18 @@
 {% extends "voca/base_aboutme.html" %}
 
 {% block section_content %}
-{{ content }}
+
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'voca/common.css' %}">
+
+
+<img class="maxwidth" src="{% static 'voca/images/bertrand.jpg' %}" alt="Bertrand de Montety profile"/>
+<img class="maxwidth" src="{% static 'voca/images/Abu_Dhabi_LouvreV1.jpg' %}" alt="Abu Dhabi"/>
+<img class="maxwidth" src="{% static 'voca/images/images1.jpeg' %}" alt="images1"/>
+<img class="maxwidth" src="{% static 'voca/images/images2.jpeg' %}" alt="images2"/>
+<img class="maxwidth" src="{% static 'voca/images/index.jpeg' %}" alt="index"/>
+<img class="maxwidth" src="{% static 'voca/images/index1.jpeg' %}" alt="index1"/>
+<img class="maxwidth" src="{% static 'voca/images/index2.jpeg' %}" alt="index2"/>
+<img class="maxwidth" src="{% static 'voca/images/index3.jpeg' %}" alt="index3"/>
+
 {% endblock %}

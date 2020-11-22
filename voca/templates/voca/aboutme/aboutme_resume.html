@@ -1,5 +1,11 @@
 {% extends "voca/base_aboutme.html" %}
 
 {% block section_content %}
-{{ content }}
+
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'voca/common.css' %}">
+
+<!--<a href="{% static 'voca/pdf/Bertrand_de_Montety_Resume.pdf'  %}">Download Resume</a>-->
+<iframe src="{% static 'voca/pdf/Bertrand_de_Montety_Resume.pdf' %}" alt="Bertrand de Montety profile" type="application/pdf" style="width:99%; height:80em;" frameborder="0"></iframe>
+
 {% endblock %}
