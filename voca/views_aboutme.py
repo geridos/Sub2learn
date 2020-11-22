@@ -11,7 +11,7 @@ def sidebar_context():
     sidebar['mystory'] = 'My story'
     sidebar['resume'] = 'Resume'
     sidebar['mypictures'] = 'My pictures'
-    sidebar['books'] = 'Books I like'
+    sidebar['miscellaneous'] = 'Miscellaneous'
     return sidebar
 
 def index(request, aboutme_page):
@@ -27,14 +27,16 @@ def index(request, aboutme_page):
         return render(request, 'voca/aboutme/aboutme_resume.html', context)
     elif aboutme_page == "mypictures":
         return render(request, 'voca/aboutme/aboutme_pictures.html', context)
+    elif aboutme_page == "miscellaneous":
+        return render(request, 'voca/aboutme/aboutme_miscellaneous.html', context)
     else:
         return render(request, 'voca/base_aboutme.html', context)
 
 def load_content_context(page_name):
         if page_name == 'mystory':
             return 'this is my life'
-        elif page_name == 'books':
-            return 'this are my books'
+        elif page_name == 'miscellaneous':
+            return 'links and others'
         elif page_name == 'resume':
             return 'this is my resume'
         elif page_name == 'mypictures':
