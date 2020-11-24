@@ -1,7 +1,5 @@
 import re
 
-
-
 def parse(text_input):
     text_input = text_input.lower()
     print('origninal text')

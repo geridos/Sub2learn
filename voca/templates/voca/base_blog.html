@@ -18,5 +18,11 @@
 
 
 {% block section_content %}
-{{content}}
+{% for f in files %}
+<div class="w3-twothird w3-container">
+    {% include f %}
+    <hr style="border-top: 4px solid #eee;">
+</div>
+
+        {% endfor  %}
 {% endblock %}

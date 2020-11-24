@@ -16,6 +16,11 @@
 {% endblock %}
 
 {% block section_content %}
+Add new profile :
+
+{% if message %}
+    {{ message }}
+{% endif %}
 
 <form method="POST" action="">
     {% csrf_token %}

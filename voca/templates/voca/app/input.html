@@ -16,7 +16,65 @@
 
 {% endblock %}
 
+
 {% block section_content %}
+{% load split_input %}
+
+
+<script>
+var count = 1;
+function changeColor(className, color) {
+    var property = document.getElementsByClassName(className);
+
+    if (count == 0) {
+        Array.prototype.forEach.call(property, function(setColor, index)
+                {
+                    property[index].style.backgroundColor = "#FFFFFF";
+                }
+                );
+        count = 1;        
+    }
+    else {
+        Array.prototype.forEach.call(property, function(setColor, index)
+                {
+                    property[index].style.backgroundColor = "#7FFF00";
+                }
+                );
+        count = 0;
+    }
+}
+</script>
+
+<style>
+.unstyled-button {
+    border: none;
+    padding: 0;
+    background: none;
+    color:blue;
+}
+</style>
+
+{% if original_input %}
+    {% with original_input|split as input %}
+        {% for w in input %}
+        <button class="unstyled-button word1" onclick="changeColor('word1')" >{{w}}</button>
+        {% endfor %}
+    {% endwith %}
+{% endif %}
+
+
+
+
+
+<br/>
+<br/>
+<br/>
+<br/>
+
+
+---------------------
+
+
 {% if in_words %}
     words already in DB = 
     {% for w in in_words %}
@@ -37,11 +95,11 @@
     <li>{{ w }}</li>
     {% endfor %}
 {% endif %}
-
+Add a new input :
 <form method="POST" action="">
     {% csrf_token %}
-    <input type="text" name="textfield">
-    ...
+    <textarea type="text" name="textfield" rows="4" cols="50"> </textarea>
+    <br/>
     <button type="submit">Upload text</button>
 </form>
 {% endblock %}

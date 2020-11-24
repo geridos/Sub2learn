@@ -31,6 +31,9 @@ def sidebar_new_profile_context():
 
 def index(request):
     print('index view')
+    if not Profile.objects.all():
+        return add_new_profile(request)
+
     list_profile = get_list_or_404(Profile)
     context = {
         'list_profile': list_profile,
@@ -42,9 +45,22 @@ def index(request):
 
 def add_new_profile(request):
     if request.method == 'POST':
-        new_text = request.POST.get('textfield', None)
+        new_name = request.POST.get('textfield', None)
+        #check is the user already exist
+        if len(new_name) < 3:
+            context = {
+                'sidebar' : sidebar_new_profile_context(),
+                'message' : "Your new username needs to have at least 3 characters"
+            }
+            return render(request, 'voca/app/new_profile.html', context)
+        if Profile.objects.filter(name=new_name):
+            context = {
+                'sidebar' : sidebar_new_profile_context(),
+                'message' : "Profile already exist, choose something else"
+            }
+            return render(request, 'voca/app/new_profile.html', context)
 
-        profile = Profile(name=new_text).save()
+        profile = Profile(name=new_name).save()
 
         #index(request)
         list_profile = get_list_or_404(Profile)
@@ -147,6 +163,7 @@ def new_input(request, profile_name):
 
         context = {
             'profile': profile,
+            'original_input' : new_text,
             'not_words': not_in_database_words,
             'in_words': in_database_words,
             'removed_tokens': removed_tokens,

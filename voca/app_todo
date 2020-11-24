@@ -1,0 +1,7 @@
+1. unique user name 
+2. OCR
+3. check the similar words in /usr/share/dict/en... -> show the word with the same prefixletters
+presentation : something nice
+sidebar : display choice
+display the sentence with the word known, unknown and removed tocken
+Capital letter to each words in the lists
