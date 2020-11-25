@@ -18,31 +18,35 @@
 
 
 {% block section_content %}
+
 {% load split_input %}
 
 
 <script>
-var count = 1;
-function changeColor(className, color) {
-    var property = document.getElementsByClassName(className);
 
-    if (count == 0) {
-        Array.prototype.forEach.call(property, function(setColor, index)
-                {
-                    property[index].style.backgroundColor = "#FFFFFF";
-                }
-                );
-        count = 1;        
-    }
-    else {
-        Array.prototype.forEach.call(property, function(setColor, index)
-                {
-                    property[index].style.backgroundColor = "#7FFF00";
-                }
-                );
-        count = 0;
+function is_known(w, i)
+{
+    console.log(i + " has been clicked");
+    var checkbox = document.getElementById(w);
+    var buttons = document.getElementsByClassName(i+'_'+w);
+
+    console.log(checkbox);
+    if (checkbox.checked == true){
+        console.log("going to uncheck");
+        checkbox.checked = false;
+        Array.prototype.forEach.call(buttons, function(word_known, index) {
+                    console.log("unstrike_through " + index);
+                    buttons[index].style.textDecoration = "";
+                });
+    } else {
+        checkbox.checked = true;
+        Array.prototype.forEach.call(buttons, function(word_unknown, index) {
+                    console.log("strike_through " + index);
+                    buttons[index].style.textDecoration = "line-through";
+                });
     }
 }
+
 </script>
 
 <style>
@@ -50,41 +54,76 @@ function changeColor(className, color) {
     border: none;
     padding: 0;
     background: none;
+}
+
+.not_in_db
+{
     color:blue;
 }
+
+.not_learnt
+{
+    color:red;
+}
+
+.invisible_checkbox{
+    display: none; 
+}
+
 </style>
+{% if message %}
+{{message}}
+{% endif %}
+
+<p>
+<form name="user_filtering" method="POST" action="">
+{% csrf_token %}
 
 {% if original_input %}
     {% with original_input|split as input %}
-        {% for w in input %}
-        <button class="unstyled-button word1" onclick="changeColor('word1')" >{{w}}</button>
+        {% for w, i in input %}
+            {% if w in not_in_db %}
+                <button class="unstyled-button not_in_db {{i}}_{{w}}" type="button" onclick="is_known('{{w}}', '{{i}}')">{{w}}</button>
+                {#<input type="checkbox" class="invisible_checkbox" id="{{w}}" name="{{w}}">#}
+                <input type="checkbox" id="{{w}}" name="{{w}}">
+            {% elif w in not_learnt %}
+                <button class="unstyled-button not_learnt {{i}}_{{w}}" type="button" onclick="is_known('{{w}}', '{{i}}')">{{w}}</button>
+                {#<input type="checkbox" class="invisible_checkbox" id="{{w}}" name="{{w}}">#}
+                <input type="checkbox" id="{{w}}" name="{{w}}">
+            {% else %}
+                {{w}}
+            {% endif %}
         {% endfor %}
     {% endwith %}
-{% endif %}
-
-
-
-
-
+    <br/>
+    <button name="submit_filter" type="submit">Submit</button>
 <br/>
 <br/>
-<br/>
-<br/>
-
-
 ---------------------
+<br/>
+<br/>
+{% endif %}
+</form>
+</p>
 
 
-{% if in_words %}
-    words already in DB = 
-    {% for w in in_words %}
+{% if not_learnt %}
+    words not learnt = 
+    {% for w in not_learnt %}
     <li>{{ w }}</li>
     {% endfor %}
 {% endif %}
 
-{% if not_words %}
+{% if in_db %}
+    words already in DB = 
+    {% for w in in_db %}
+    <li>{{ w }}</li>
+    {% endfor %}
+{% endif %}
+
+{% if not_in_db %}
     New words not in DB  = 
-    {% for w in not_words %}
+    {% for w in not_in_db %}
     <li>{{ w }}</li>
     {% endfor %}
 {% endif %}
@@ -95,11 +134,11 @@ function changeColor(className, color) {
     <li>{{ w }}</li>
     {% endfor %}
 {% endif %}
-Add a new input :
-<form method="POST" action="">
+<br/>
+<form name="new_input" method="POST" action="">
     {% csrf_token %}
-    <textarea type="text" name="textfield" rows="4" cols="50"> </textarea>
+    <textarea type="text" name="new_input" rows="4" cols="50"> </textarea>
     <br/>
-    <button type="submit">Upload text</button>
+    <button name="submit_new_input" type="submit">Upload text</button>
 </form>
 {% endblock %}

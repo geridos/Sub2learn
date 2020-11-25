@@ -138,41 +138,81 @@ def profile_stat(request, profile_name):
     }
     return render(request, 'voca/app/profile_stat.html', context)
 
+
+def new_input_user_filter(request, profile):
+
+    print("new_input_user_filter")
+    print(request.POST.keys())
+    print(request.POST)
+
+    context = {
+        'sidebar' : sidebar_context(profile.name),
+        'message' : "new_input_user_filter",
+    }
+    return render(request, 'voca/app/input.html', context)
+
+def new_input_default_view(request, profile, message):
+    context = {
+        'sidebar' : sidebar_context(profile.name),
+        'message' : message,
+    }
+    return render(request, 'voca/app/input.html', context)
+
+
+def new_input_process_submited_text(request, profile, new_text):
+    if len(new_text) < 2:
+        return new_input_default_view(request, profile, "Invalide text")
+
+    tokens = parse(new_text)
+    filtered_words = tokens[0]
+    removed_tokens = tokens[1]
+
+    print('removed_tokens')
+    print(removed_tokens)
+
+    not_in_database_words = [w for w in filtered_words
+                             if len(MidnightOil.objects.filter(word=w, profile=profile.id)) == 0]
+
+    in_database_words = [w for w in filtered_words
+                         if len(MidnightOil.objects.filter(word=w, profile=profile.id)) > 0]
+
+    not_learnt = [w for w in filtered_words
+                  if len(MidnightOil.objects.filter(word=w, profile=profile.id, burnt=False)) > 0]
+
+    print('words not in database')
+    print(not_in_database_words)
+
+    [ profile.midnightoil_set.create(word=w) for w in not_in_database_words ]
+
+    context = {
+        'profile': profile,
+        'original_input' : new_text,
+        'not_in_db': not_in_database_words,
+        'in_db': in_database_words,
+        'not_learnt': not_learnt,
+        'removed_tokens': removed_tokens,
+        'sidebar' : sidebar_context(profile.name),
+    }
+    return render(request, 'voca/app/input.html', context)
+
+
+
 def new_input(request, profile_name):
     profile = get_object_or_404(Profile, name=profile_name)
+
+    print(request.POST.keys())
     if request.method == 'POST':
-        new_text = request.POST.get('textfield', None)
 
-        tokens = parse(new_text)
-        filtered_words = tokens[0]
-        removed_tokens = tokens[1]
+        print(request.POST)
+        if 'new_input' in request.POST:
+            new_text = request.POST.get('new_input', None)
+            return new_input_process_submited_text(request, profile, new_text)
+        elif 'submit_filter' in request.POST:
+            return new_input_user_filter(request, profile)
 
-        print('removed_tokens')
-        print(removed_tokens)
-
-        not_in_database_words = [w for w in filtered_words
-            if len(MidnightOil.objects.filter(word=w, profile=profile.id)) == 0]
-
-        in_database_words = [w for w in filtered_words
-            if len(MidnightOil.objects.filter(word=w, profile=profile.id)) > 0]
-
-        print('words not in database')
-        print(not_in_database_words)
-
-        [ profile.midnightoil_set.create(word=w) for w in not_in_database_words ]
-
-        context = {
-            'profile': profile,
-            'original_input' : new_text,
-            'not_words': not_in_database_words,
-            'in_words': in_database_words,
-            'removed_tokens': removed_tokens,
-            'sidebar' : sidebar_context(profile.name),
-        }
-        return render(request, 'voca/app/input.html', context)
     else:
-        context = {
-            'sidebar' : sidebar_context(profile.name),
-        }
-        print('Hello no request post')
-        return render(request, 'voca/app/input.html', context)
+        return new_input_default_view(request, profile, "Submit new texts or a new words")
+
+
+
+        #{% endfor %}
