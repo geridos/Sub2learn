@@ -17,9 +17,21 @@
 {% endblock %}
 
 {% block section_content %}
-{% if list_words%}
-    {% for w in list_words %}
-    <li>{{ w }}</li>
+<div class="w3-twothird w3-container">
+<h3>List of word you learnt</h3>
+{% if list_words_learnt %}
+    {% for w in list_words_learnt %}
+    <li>{{ w|capfirst }}</li>
     {% endfor %}
 {% endif %}
+
+<br/>
+<h3>List of word you already knew</h3>
+{% if list_words_already_know %}
+    {% for w in list_words_already_know %}
+    <li>{{ w|capfirst }}</li>
+    {% endfor %}
+{% endif %}
+
+</div>
 {% endblock %}

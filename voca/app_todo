@@ -1,7 +1,41 @@
-1. unique user name 
-2. OCR
-3. check the similar words in /usr/share/dict/en... -> show the word with the same prefixletters
-presentation : something nice
-sidebar : display choice
+--Backlog
+add date for each words leant 
+send by email the list of words the user don't know
+check if words lengh is more than 20 -> not a word.
+Invert selection in newinput page : by default all the words are unknown. Make them known and let the user select the words he don't knwon
+Add user comment in the text
+In the page input, add popup that tell when a words is now knew, and a popup to tell the user that the words of going in midnight oil
+Set Status of each words : forget words (goes from learnt to to_learn), delete words (incorrect words - ask the user why incorrect)
+
+
+
+--TODO (from the top prio to low prio):
+display nicely the words knonw and unknown
+mofify the title name of each page:  indicate on which page the user is : dark selected on the menu side.
+Stat page, add also few words the user don't know, few other words randomly picked from /etc/disc/...
+counter visitor
+
+check the similar words in /usr/share/dict/en... -> show the word with the same prefixletters
+
+pre list of words with the difficulty - ask the user his level
+    -> display the 1000 / 2000 / 5000 words
+
+change the name of the project and app in the codebase
+refactorisation code
+git clean up
+background entry page is not covering all the screen
+set an admin password hard
+put on the side the article links
+parser make it better
+
+display info : when the words as been learnt, the context of the sentence.
+Make it work for smartphone
+OCR
+writing tests
+
+--DONE:
 display the sentence with the word known, unknown and removed tocken
+unique user name 
 Capital letter to each words in the lists
+change title of the website (W3 CSS to Voca)
+split the words the user already know and the one he just learnt

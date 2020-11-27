@@ -21,29 +21,61 @@
 
 {% load split_input %}
 
+<div class="w3-twothird w3-container">
 
 <script>
 
-function is_known(w, i)
+function setWordStatus(w, i, status)
 {
     console.log(i + " has been clicked");
-    var checkbox = document.getElementById(w);
-    var buttons = document.getElementsByClassName(i+'_'+w);
+    var select = document.getElementById(w);
+    var buttons = document.getElementsByClassName(i + '_' + w);
+    var option = document.createElement("option");
 
-    console.log(checkbox);
-    if (checkbox.checked == true){
-        console.log("going to uncheck");
-        checkbox.checked = false;
-        Array.prototype.forEach.call(buttons, function(word_known, index) {
-                    console.log("unstrike_through " + index);
-                    buttons[index].style.textDecoration = "";
-                });
-    } else {
-        checkbox.checked = true;
-        Array.prototype.forEach.call(buttons, function(word_unknown, index) {
-                    console.log("strike_through " + index);
-                    buttons[index].style.textDecoration = "line-through";
-                });
+    console.log(select.value);
+
+    if (status == 'already_know') {
+
+        if (select.value == '' || select.value == 'tolearn') {
+            option.text = "known";
+            select.add(option); 
+            option.selected = true;
+            Array.prototype.forEach.call(buttons, function(word_known, index) {
+                buttons[index].style.color = 'grey';
+            });
+        }
+        else if (select.value == 'known')
+        {
+            option.text = "tolearn";
+            select.add(option); 
+            option.selected = true;
+            Array.prototype.forEach.call(buttons, function(word_known, index) {
+                buttons[index].style.color = 'blue';
+            });
+        }
+        
+    } else if (status == 'tolearn' ){
+        if (select.value == '' || select.value == 'tolearn') {
+            option.text = "learnt";
+            select.add(option); 
+            option.selected = true;
+            Array.prototype.forEach.call(buttons, function(word_unknown, index) {
+                buttons[index].style.textDecoration = "line-through";
+            });
+        }
+        else if (select.value == 'learnt') {
+            option.text = "tolearn";
+            select.add(option); 
+            option.selected = true;
+            Array.prototype.forEach.call(buttons, function(word_unknown, index) {
+                buttons[index].style.textDecoration = "";
+            });
+
+        }
+    }
+    else
+    {
+        console.log("Unreconized status");
     }
 }
 
@@ -66,8 +98,18 @@ function is_known(w, i)
     color:red;
 }
 
-.invisible_checkbox{
+.invisible_select{
     display: none; 
+}
+
+#blueword
+{
+    color:blue;
+}
+
+#redword
+{
+    color:red;
 }
 
 </style>
@@ -75,21 +117,40 @@ function is_known(w, i)
 {{message}}
 {% endif %}
 
-<p>
-<form name="user_filtering" method="POST" action="">
-{% csrf_token %}
+<form name="new_input" method="POST" action="">
+    {% csrf_token %}
+    <textarea type="text" name="new_input" rows="4" cols="50"> </textarea>
+    <br/>
+    <button name="submit_new_input" type="submit">Upload text</button>
+</form>
+
 
 {% if original_input %}
+<br/>
+---------------------
+<br/>
+<form name="user_filtering" method="POST" action="">
+{% csrf_token %}
+Optional: tell us what words you know:
+<br/>
+<i><span id="blueword">blue</span> = never seen here, <span id="redword">red</span> = you don't know, black = you already know.
+<br/>
+By default all the blue words are not leant</i>
+<br/>
+<button type="button" onclick="invert_selection('{{input}}')">Invert selection</button>
+<br/>
+<i>Select the words you don't know. In <span id="redword">red</span>, the words you don't know. By default all the words are learnt</i>
+<br/>
+---------------------
+<br/>
     {% with original_input|split as input %}
         {% for w, i in input %}
             {% if w in not_in_db %}
-                <button class="unstyled-button not_in_db {{i}}_{{w}}" type="button" onclick="is_known('{{w}}', '{{i}}')">{{w}}</button>
-                {#<input type="checkbox" class="invisible_checkbox" id="{{w}}" name="{{w}}">#}
-                <input type="checkbox" id="{{w}}" name="{{w}}">
+                <button class="unstyled-button not_in_db {{i}}_{{w}}" type="button" onclick="setWordStatus('{{w}}', '{{i}}', 'already_know')">{{w}}</button>
+                <select class="invisible_select" id="{{w}}" name="{{w}}"></select>
             {% elif w in not_learnt %}
-                <button class="unstyled-button not_learnt {{i}}_{{w}}" type="button" onclick="is_known('{{w}}', '{{i}}')">{{w}}</button>
-                {#<input type="checkbox" class="invisible_checkbox" id="{{w}}" name="{{w}}">#}
-                <input type="checkbox" id="{{w}}" name="{{w}}">
+                <button class="unstyled-button not_learnt {{i}}_{{w}}" type="button" onclick="setWordStatus('{{w}}', '{{i}}', 'tolearn')">{{w}}</button>
+                <select class="invisible_select" id="{{w}}" name="{{w}}"></select>
             {% else %}
                 {{w}}
             {% endif %}
@@ -97,48 +158,8 @@ function is_known(w, i)
     {% endwith %}
     <br/>
     <button name="submit_filter" type="submit">Submit</button>
-<br/>
-<br/>
----------------------
-<br/>
-<br/>
 {% endif %}
 </form>
-</p>
 
-
-{% if not_learnt %}
-    words not learnt = 
-    {% for w in not_learnt %}
-    <li>{{ w }}</li>
-    {% endfor %}
-{% endif %}
-
-{% if in_db %}
-    words already in DB = 
-    {% for w in in_db %}
-    <li>{{ w }}</li>
-    {% endfor %}
-{% endif %}
-
-{% if not_in_db %}
-    New words not in DB  = 
-    {% for w in not_in_db %}
-    <li>{{ w }}</li>
-    {% endfor %}
-{% endif %}
-
-{% if removed_tokens %}
-    Removed tockens = 
-    {% for w in removed_tokens %}
-    <li>{{ w }}</li>
-    {% endfor %}
-{% endif %}
-<br/>
-<form name="new_input" method="POST" action="">
-    {% csrf_token %}
-    <textarea type="text" name="new_input" rows="4" cols="50"> </textarea>
-    <br/>
-    <button name="submit_new_input" type="submit">Upload text</button>
-</form>
+</div>
 {% endblock %}

@@ -18,21 +18,14 @@
 
 {% block section_content %}
 
-
-Hello {{ profile.name }} this are the {{ mode }}
-{% if selected_words %}
-    {% for w in selected_words %}
-    <li> {{ w }}</li>
-    {%endfor%}
-{% endif %}
+Words to learn:
 {% if list_words %}
-This are the list of words you been through
 <form action="" method="post">
 {% csrf_token %}
 <ul>
     {% for w in list_words %}
     <input type="checkbox" name="{{ w }}" id="word{{ forloop.counter }}" value="{{ w.id  }}">
-    <a href=https://dictionnaire.reverso.net/anglais-francais/{{ w }} target="_blank">{{ w }} </a>
+    <a href=https://dictionnaire.reverso.net/anglais-francais/{{ w }} target="_blank">{{ w|capfirst  }} </a>
     <br>
     {% endfor %}
 </ul>

@@ -18,10 +18,12 @@
 
 {% block section_content %}
 
+<div class="w3-twothird w3-container">
 
-Hello {{ profile.name }}
+<h3>Hello {{ profile.name }}</h3>
 
 <li><a>words to learn : {{ stat_tolearn }}</a></li>
 <li><a>words learnt : {{ stat_learnt }}</a></li>
+</div>
 
 {% endblock %}

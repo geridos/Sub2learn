@@ -26,7 +26,7 @@ def sidebar_index_context():
 
 def sidebar_new_profile_context():
     sidebar = collections.OrderedDict()
-    sidebar['profiles'] = 'Profiles'
+    sidebar['profiles'] = 'Back to profiles'
     return sidebar
 
 def index(request):
@@ -76,11 +76,14 @@ def add_new_profile(request):
 
 def burntOil(request, profile_name):
     profile = get_object_or_404(Profile, name=profile_name)
-    list_words = profile.midnightoil_set.filter(burnt=True)
+    list_words_learnt = profile.midnightoil_set.filter(burnt=True, already_know=False)
+    list_words_already_know = profile.midnightoil_set.filter(burnt=True, already_know=True)
+
     context = {
         'profile': profile,
         'mode': "burntOil",
-        'list_words': list_words,
+        'list_words_learnt': list_words_learnt,
+        'list_words_already_know': list_words_already_know,
         'sidebar' : sidebar_context(profile.name)
     }
     return render(request, 'voca/app/learnt_words.html', context)
@@ -145,9 +148,24 @@ def new_input_user_filter(request, profile):
     print(request.POST.keys())
     print(request.POST)
 
+    for key, value in request.POST.items():
+        if key == 'csrfmiddlewaretoken' or key == 'submit_filter':
+            continue
+        if value == "tolearn":
+            continue #already in the database
+
+        word_learnt = profile.midnightoil_set.get(word=key)
+        if value == "known":
+            word_learnt.burnt = True
+            word_learnt.already_know = True
+        elif value == "learnt":
+            word_learnt.burnt = True
+
+        word_learnt.save()
+
     context = {
         'sidebar' : sidebar_context(profile.name),
-        'message' : "new_input_user_filter",
+        'message' : "Add more text or words: ",
     }
     return render(request, 'voca/app/input.html', context)
 
@@ -196,7 +214,6 @@ def new_input_process_submited_text(request, profile, new_text):
     return render(request, 'voca/app/input.html', context)
 
 
-
 def new_input(request, profile_name):
     profile = get_object_or_404(Profile, name=profile_name)
 
@@ -209,10 +226,5 @@ def new_input(request, profile_name):
             return new_input_process_submited_text(request, profile, new_text)
         elif 'submit_filter' in request.POST:
             return new_input_user_filter(request, profile)
-
     else:
-        return new_input_default_view(request, profile, "Submit new texts or a new words")
-
-
-
-        #{% endfor %}
+        return new_input_default_view(request, profile, "Submit a new text or a new words")
